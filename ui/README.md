@@ -2,6 +2,12 @@
 
 Ui solution for the jug riddle problem
 
+## Configuration variables
+To configure the server that the application should connect to.
+```
+(optional) SERVER_URL=localhost:3000
+```
+
 ## Project setup
 
 ### Docker setup:
