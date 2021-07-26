@@ -1,6 +1,12 @@
-# Clovers ui
+# Clovers server
 
 Server solution for the jug riddle problem
+
+## Configuration variables
+Port where server should be listen to.
+```
+(optional) SERVER_PORT=3000
+```
 
 ## Project setup
 
