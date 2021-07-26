@@ -55,7 +55,7 @@ func JugRiddleHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		var responseError *ResponseError
 		switch e := err.(type) {
-		case *InvalidParamaetersError:
+		case *InvalidParametersError:
 			responseError = &ResponseError{Err: e.Error(), StatusCode: HttpStatusCode["ClientError"]["BadRequest"]}
 		default:
 			responseError = &ResponseError{Err: e.Error(), StatusCode: HttpStatusCode["ServerError"]["InternalServerError"]}

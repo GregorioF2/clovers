@@ -71,7 +71,7 @@ func validateJugRiddleParameters(x int, y int, z int) (bool, string) {
 func JugRiddle(x int, y int, z int) ([]jug.Step, error) {
 	ok, err := validateJugRiddleParameters(x, y, z)
 	if !ok {
-		return nil, &InvalidParamaetersError{Err: err}
+		return nil, &InvalidParametersError{Err: err}
 	}
 
 	if !thereIsSolutionJugRiddle(x, y, z) {

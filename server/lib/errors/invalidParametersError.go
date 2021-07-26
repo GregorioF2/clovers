@@ -1,9 +1,9 @@
 package errors
 
-type InvalidParamaetersError struct {
+type InvalidParametersError struct {
 	Err string
 }
 
-func (m *InvalidParamaetersError) Error() string {
+func (m *InvalidParametersError) Error() string {
 	return m.Err
 }
