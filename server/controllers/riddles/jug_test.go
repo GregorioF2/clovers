@@ -37,7 +37,7 @@ func TestJugRiddleWithNoSolution(t *testing.T) {
 	solution, err := controller.JugRiddle(x, y, z)
 
 	if err != nil {
-		t.Errorf("Error solving riddle: %s.", err.Err)
+		t.Errorf("Error solving riddle: %s.", err.Error())
 	}
 	if solution != nil {
 		t.Errorf("Expected solution to be nil.")

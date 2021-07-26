@@ -1,9 +1,6 @@
 package riddles
 
 import (
-	"fmt"
-
-	. "github.com/gregorioF2/clovers/lib/consts"
 	. "github.com/gregorioF2/clovers/lib/errors"
 	. "github.com/gregorioF2/clovers/lib/utils"
 	"github.com/gregorioF2/clovers/models/riddles/jug"
@@ -71,10 +68,10 @@ func validateJugRiddleParameters(x int, y int, z int) (bool, string) {
 	return true, ""
 }
 
-func JugRiddle(x int, y int, z int) (*[]jug.Step, *Error) {
+func JugRiddle(x int, y int, z int) (*[]jug.Step, error) {
 	ok, err := validateJugRiddleParameters(x, y, z)
 	if !ok {
-		return nil, NewError(fmt.Sprintf("Error: %s", err), HttpStatusCode["ClientError"]["BadRequest"])
+		return nil, &InvalidParamaetersError{Err: err}
 	}
 
 	if !thereIsSolutionJugRiddle(x, y, z) {
