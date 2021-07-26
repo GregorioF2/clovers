@@ -11,7 +11,7 @@ import (
 	. "github.com/gregorioF2/clovers/lib/errors"
 )
 
-func readAndValdidateJugRiddleParameters(queryParams map[string][]string) (int, int, int, *Error) {
+func readAndValdidateJugRiddleQueryParams(queryParams map[string][]string) (int, int, int, *Error) {
 	validateParam := func(key string) (int, *Error) {
 		param, ok := queryParams[key]
 		if !ok {
@@ -42,10 +42,12 @@ func readAndValdidateJugRiddleParameters(queryParams map[string][]string) (int, 
 // public
 
 func JugRiddleHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
-	x, y, z, responseError := readAndValdidateJugRiddleParameters(r.URL.Query())
+	x, y, z, responseError := readAndValdidateJugRiddleQueryParams(r.URL.Query())
 	if responseError != nil {
 		http.Error(w, responseError.Err, responseError.StatusCode)
 		return
