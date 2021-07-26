@@ -2,12 +2,12 @@ package riddles
 
 import (
 	. "github.com/gregorioF2/clovers/lib/errors"
-	. "github.com/gregorioF2/clovers/lib/utils"
+	math "github.com/gregorioF2/clovers/lib/utils/math"
 	"github.com/gregorioF2/clovers/models/riddles/jug"
 )
 
 func thereIsSolutionJugRiddle(x int, y int, z int) bool {
-	return (z % GCD(x, y)) == 0
+	return (z % math.GCD(x, y)) == 0
 }
 
 func newStep(x, y int, invertJugs bool) jug.Step {
@@ -17,25 +17,25 @@ func newStep(x, y int, invertJugs bool) jug.Step {
 	return jug.Step{X: x, Y: y}
 }
 
-func pourJuggle(fromCapacity, toCapacity, goal int, invertJugs bool) *[]jug.Step {
+func pourJuggle(fromCapacity, toCapacity, goal int, invertJugs bool) []jug.Step {
 	fromCurrentVol := fromCapacity
 	toCurrentVol := 0
 
 	steps := make([]jug.Step, 0)
 	if goal == 0 {
-		return &steps
+		return steps
 	}
 	steps = append(steps, newStep(fromCurrentVol, toCurrentVol, invertJugs))
 
 	for fromCurrentVol != goal && toCurrentVol != goal {
-		maxPourAmmount := MinInt(fromCurrentVol, toCapacity-toCurrentVol)
+		maxPourAmmount := math.MinInt(fromCurrentVol, toCapacity-toCurrentVol)
 
 		fromCurrentVol -= maxPourAmmount
 		toCurrentVol += maxPourAmmount
 		steps = append(steps, newStep(fromCurrentVol, toCurrentVol, invertJugs))
 
 		if fromCurrentVol == goal || toCurrentVol == goal {
-			return &steps
+			return steps
 		}
 
 		if fromCurrentVol == 0 {
@@ -48,7 +48,7 @@ func pourJuggle(fromCapacity, toCapacity, goal int, invertJugs bool) *[]jug.Step
 			steps = append(steps, newStep(fromCurrentVol, toCurrentVol, invertJugs))
 		}
 	}
-	return &steps
+	return steps
 }
 
 func validateJugRiddleParameters(x int, y int, z int) (bool, string) {
@@ -68,7 +68,7 @@ func validateJugRiddleParameters(x int, y int, z int) (bool, string) {
 	return true, ""
 }
 
-func JugRiddle(x int, y int, z int) (*[]jug.Step, error) {
+func JugRiddle(x int, y int, z int) ([]jug.Step, error) {
 	ok, err := validateJugRiddleParameters(x, y, z)
 	if !ok {
 		return nil, &InvalidParamaetersError{Err: err}
@@ -81,7 +81,7 @@ func JugRiddle(x int, y int, z int) (*[]jug.Step, error) {
 	pourXtoYSol := pourJuggle(x, y, z, false)
 	pourYtoXSol := pourJuggle(y, x, z, true)
 
-	if len(*pourXtoYSol) <= len(*pourYtoXSol) {
+	if len(pourXtoYSol) <= len(pourYtoXSol) {
 		return pourXtoYSol, nil
 	} else {
 		return pourYtoXSol, nil

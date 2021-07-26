@@ -50,7 +50,7 @@
         </button>
       </div>
       
-      <div class="no-solution-division" v-if="solution == null">
+      <div class="no-solution-division" v-if="noSolution">
           <span> There is no solution for this inputs </span>
       </div>
 
@@ -107,13 +107,11 @@ export default {
       errorMessage: "",
       currentStep: null,
       interval: null,
+      noSolution: false
     };
   },
   computed: {
     thereIsSolution() {
-      if (!this.solution)  {
-        return false;
-      }
       return this.solution.length > 0;
     },
     xJugImage() {
@@ -186,13 +184,21 @@ export default {
         return;
       }
       try {
-        this.solution = await riddelsController.obtainJugRiddleSolution(
+        const sol = await riddelsController.obtainJugRiddleSolution(
           this.xCapacity,
           this.yCapacity,
           this.zGoal
         );
+
+        if (!sol) {
+          this.noSolution = true;
+          this.solution = [];
+        } else {
+          this.noSolution = false;
+          this.solution = sol;
+        }
       } catch (err) {
-        console.log(`err: `, err);
+        console.log(err);
         this.showError = true;
         this.errorMessage = err;
       }

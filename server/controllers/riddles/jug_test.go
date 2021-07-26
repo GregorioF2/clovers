@@ -83,11 +83,11 @@ func TestJugRiddleWithSolution(t *testing.T) {
 				t.Errorf("Got no solution on jug riddle.")
 			}
 			expectedResultOk := true
-			for i, step := range *sol {
+			for i, step := range sol {
 				expectedResultOk = expectedResultOk && step == test.expected[i]
 			}
 			if !expectedResultOk {
-				t.Error("Got unexpected result for jug riddle. Result: ", *sol, ". Expected: ", test.expected)
+				t.Error("Got unexpected result for jug riddle. Result: ", sol, ". Expected: ", test.expected)
 			}
 		})
 	}
