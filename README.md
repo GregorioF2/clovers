@@ -9,5 +9,3 @@ sudo docker-compose -p clovers up -d
 ```
 The Server will run by default on the port `3000`, and the UI will run on the port `8080`
 
-## Configuration
-
