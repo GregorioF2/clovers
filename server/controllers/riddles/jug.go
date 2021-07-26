@@ -20,35 +20,35 @@ func newStep(x, y int, invertJugs bool) jug.Step {
 	return jug.Step{X: x, Y: y}
 }
 
-func pourJuggle(xCap, yCap, z int, invertJugs bool) *[]jug.Step {
-	xCurr := xCap
-	yCurr := 0
+func pourJuggle(fromCapacity, toCapacity, goal int, invertJugs bool) *[]jug.Step {
+	fromCurrentVol := fromCapacity
+	toCurrentVol := 0
 
 	steps := make([]jug.Step, 0)
-	if z == 0 {
+	if goal == 0 {
 		return &steps
 	}
-	steps = append(steps, newStep(xCurr, yCurr, invertJugs))
+	steps = append(steps, newStep(fromCurrentVol, toCurrentVol, invertJugs))
 
-	for xCurr != z && yCurr != z {
-		maxPourAmmount := MinInt(xCurr, yCap-yCurr)
+	for fromCurrentVol != goal && toCurrentVol != goal {
+		maxPourAmmount := MinInt(fromCurrentVol, toCapacity-toCurrentVol)
 
-		xCurr -= maxPourAmmount
-		yCurr += maxPourAmmount
-		steps = append(steps, newStep(xCurr, yCurr, invertJugs))
+		fromCurrentVol -= maxPourAmmount
+		toCurrentVol += maxPourAmmount
+		steps = append(steps, newStep(fromCurrentVol, toCurrentVol, invertJugs))
 
-		if xCurr == z || yCurr == z {
+		if fromCurrentVol == goal || toCurrentVol == goal {
 			return &steps
 		}
 
-		if xCurr == 0 {
-			xCurr = xCap
-			steps = append(steps, newStep(xCurr, yCurr, invertJugs))
+		if fromCurrentVol == 0 {
+			fromCurrentVol = fromCapacity
+			steps = append(steps, newStep(fromCurrentVol, toCurrentVol, invertJugs))
 		}
 
-		if yCurr == yCap {
-			yCurr = 0
-			steps = append(steps, newStep(xCurr, yCurr, invertJugs))
+		if toCurrentVol == toCapacity {
+			toCurrentVol = 0
+			steps = append(steps, newStep(fromCurrentVol, toCurrentVol, invertJugs))
 		}
 	}
 	return &steps
