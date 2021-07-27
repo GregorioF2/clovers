@@ -11,15 +11,15 @@ import (
 	. "github.com/gregorioF2/clovers/lib/errors"
 )
 
-func readAndValdidateJugRiddleQueryParams(queryParams map[string][]string) (int, int, int, *ResponseError) {
-	validateParam := func(key string) (int, *ResponseError) {
+func readAndValdidateJugRiddleQueryParams(queryParams map[string][]string) (int, int, int, error) {
+	validateParam := func(key string) (int, error) {
 		param, ok := queryParams[key]
 		if !ok {
-			return 0, &ResponseError{Err: fmt.Sprintf("query param '%s' is required.", key), StatusCode: HttpStatusCode["ClientError"]["BadRequest"]}
+			return 0, &InvalidParametersError{Err: fmt.Sprintf("query param '%s' is required.", key)}
 		}
 		value, err := strconv.ParseInt(param[0], 10, 64)
 		if err != nil {
-			return 0, &ResponseError{Err: fmt.Sprintf("query param '%s' must be an integer.", key), StatusCode: HttpStatusCode["ClientError"]["BadRequest"]}
+			return 0, &InvalidParametersError{Err: fmt.Sprintf("query param '%s' must be an integer.", key)}
 		}
 		return int(value), nil
 	}
@@ -45,9 +45,16 @@ func JugRiddleHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
-	x, y, z, responseError := readAndValdidateJugRiddleQueryParams(r.URL.Query())
-	if responseError != nil {
-		http.Error(w, responseError.Err, responseError.StatusCode)
+	x, y, z, err := readAndValdidateJugRiddleQueryParams(r.URL.Query())
+	if err != nil {
+		var responseError *ResponseError
+		switch e := err.(type) {
+		case *InvalidParametersError:
+			responseError = &ResponseError{Err: e.Error(), StatusCode: HttpStatusCode["ClientError"]["BadRequest"]}
+		default:
+			responseError = &ResponseError{Err: e.Error(), StatusCode: HttpStatusCode["ServerError"]["InternalServerError"]}
+		}
+		http.Error(w, responseError.Error(), responseError.StatusCode)
 		return
 	}
 
@@ -64,14 +71,9 @@ func JugRiddleHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if responseError != nil {
-		http.Error(w, responseError.Err, responseError.StatusCode)
-		return
-	}
-
 	res, err := json.Marshal(data)
 	if err != nil {
-		responseError = &ResponseError{Err: "failed parse response to []byte", StatusCode: HttpStatusCode["ServerError"]["InternalServerError"]}
+		responseError := &ResponseError{Err: "failed parse response to []byte", StatusCode: HttpStatusCode["ServerError"]["InternalServerError"]}
 		http.Error(w, responseError.Error(), responseError.StatusCode)
 		return
 	}
