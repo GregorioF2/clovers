@@ -8,12 +8,14 @@ import (
 
 	"github.com/gorilla/mux"
 	config "github.com/gregorioF2/clovers/configs"
+	middlewares "github.com/gregorioF2/clovers/middlewares"
 	riddles "github.com/gregorioF2/clovers/routes/riddles"
 )
 
 func newRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/riddles/jug", riddles.JugRiddleHandler)
+	router.Use(middlewares.SetCorsHeaders)
 	return router
 }
 

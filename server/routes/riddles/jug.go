@@ -40,11 +40,6 @@ func readAndValdidateJugRiddleQueryParams(queryParams map[string][]string) (int,
 }
 
 func JugRiddleHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-
 	x, y, z, err := readAndValdidateJugRiddleQueryParams(r.URL.Query())
 	if err != nil {
 		var responseError *ResponseError
